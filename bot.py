@@ -1,27 +1,20 @@
 import discord
-from bot_logic import gen_pass
-# Variabel intents menyimpan hak istimewa bot
+from discord.ext import commands
+
 intents = discord.Intents.default()
-# Mengaktifkan hak istimewa message-reading
 intents.message_content = True
-# Membuat bot di variabel klien dan mentransfernya hak istimewa
-client = discord.Client(intents=intents)
 
-@client.event
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
 async def on_ready():
-    print(f'Kita telah masuk sebagai {client.user}')
+    print(f'We have logged in as {bot.user}')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$halo'):
-        await message.channel.send("Hi!")
-    elif message.content.startswith('$bye'):
-        await message.channel.send("\\U0001f642")
-    elif message.content.startswith('$New Password'):
-        await message.channel.send(gen_pass(10))
-    else:
-        await message.channel.send(message.content)
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hi! I am a bot {bot.user}!')
 
-client.run("MTE2NzY0NzYzNTgzOTEyMzUyNw.Gxt1Gs.yCe0o8gbE-lxOCj9c1yXYUjgG47jHd9SnJT2vc")
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
